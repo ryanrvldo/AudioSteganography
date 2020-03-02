@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.skripsi.audiosteganography.ui.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_embedFragment"
+            app:destination="@id/embedFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/homeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_compressFragment"
+            app:destination="@id/compressFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim"
+            app:popUpTo="@id/homeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_decompressFragment"
+            app:destination="@id/decompressFragment"
+            app:popUpTo="@id/homeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_extractFragment"
+            app:destination="@id/extractFragment"
+            app:popUpTo="@id/homeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/embedFragment"
+        android:name="com.skripsi.audiosteganography.ui.EmbedFragment"
+        android:label="Embedding Data"
+        tools:layout="@layout/fragment_embed" >
+        <action
+            android:id="@+id/action_embedFragment_to_compressFragment"
+            app:destination="@id/compressFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/compressFragment"
+        android:name="com.skripsi.audiosteganography.ui.CompressFragment"
+        android:label="Compress File"
+        tools:layout="@layout/fragment_compress" >
+        <action
+            android:id="@+id/action_compressFragment_to_decompressFragment"
+            app:destination="@id/decompressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/decompressFragment"
+        android:name="com.skripsi.audiosteganography.ui.DecompressFragment"
+        android:label="Decompress File" >
+        <action
+            android:id="@+id/action_decompressFragment_to_extractFragment"
+            app:destination="@id/extractFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/extractFragment"
+        android:name="com.skripsi.audiosteganography.ui.ExtractFragment"
+        android:label="Extract Message" />
+</navigation>

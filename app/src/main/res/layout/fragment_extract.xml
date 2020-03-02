@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.CompressFragment">
+
+    <TextView
+        android:id="@+id/tv_file_audio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_dimen"
+        android:layout_marginTop="@dimen/default_dimen"
+        android:text="File:"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_audio_path"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/tv_file_audio"
+        app:layout_constraintTop_toTopOf="@+id/tv_file_audio"
+        tools:text="File Path" />
+
+    <Button
+        android:id="@+id/btn_select_audio"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/default_dimen"
+        android:text="Select File"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_file_audio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_file_audio" />
+
+    <TextView
+        android:id="@+id/tv_file_key"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_dimen"
+        android:layout_marginTop="40dp"
+        android:text="Key:"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_select_audio" />
+
+
+    <Button
+        android:id="@+id/btn_select_key"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:text="Select Key"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_file_key"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_file_key" />
+
+    <TextView
+        android:id="@+id/tv_mwc_a"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_dimen"
+        android:text="a:"
+        app:layout_constraintStart_toStartOf="@+id/tv_file_key"
+        app:layout_constraintTop_toBottomOf="@+id/btn_select_key" />
+
+    <EditText
+        android:id="@+id/a_edit"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:autofillHints="a"
+        android:hint="a"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_mwc_a"
+        app:layout_constraintStart_toEndOf="@+id/tv_mwc_a"
+        app:layout_constraintTop_toTopOf="@+id/tv_mwc_a" />
+
+    <TextView
+        android:id="@+id/tv_mwc_b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_dimen"
+        android:text="b:"
+        app:layout_constraintBottom_toBottomOf="@+id/b_edit"
+        app:layout_constraintStart_toStartOf="@+id/tv_mwc_a"
+        app:layout_constraintTop_toTopOf="@+id/b_edit" />
+
+    <EditText
+        android:id="@+id/b_edit"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/default_dimen"
+        android:hint="b"
+        android:inputType="number"
+        app:layout_constraintStart_toEndOf="@+id/tv_mwc_a"
+        app:layout_constraintTop_toBottomOf="@+id/a_edit" />
+
+    <TextView
+        android:id="@+id/tv_mwc_c0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_dimen"
+        android:text="C0:"
+        app:layout_constraintBottom_toBottomOf="@+id/c0_edit"
+        app:layout_constraintStart_toStartOf="@+id/tv_mwc_a"
+        app:layout_constraintTop_toTopOf="@+id/c0_edit" />
+
+    <EditText
+        android:id="@+id/c0_edit"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/default_dimen"
+        android:hint="c0"
+        android:inputType="number"
+        app:layout_constraintStart_toEndOf="@+id/tv_mwc_c0"
+        app:layout_constraintTop_toBottomOf="@+id/b_edit" />
+
+    <TextView
+        android:id="@+id/tv_mwc_x0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_dimen"
+        android:text="X0:"
+        app:layout_constraintBottom_toBottomOf="@+id/x0_edit"
+        app:layout_constraintStart_toStartOf="@+id/tv_mwc_a"
+        app:layout_constraintTop_toTopOf="@+id/x0_edit" />
+
+    <EditText
+        android:id="@+id/x0_edit"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/default_dimen"
+        android:hint="x0"
+        android:inputType="number"
+        app:layout_constraintStart_toEndOf="@+id/tv_mwc_x0"
+        app:layout_constraintTop_toBottomOf="@+id/c0_edit" />
+
+    <Button
+        android:id="@+id/btn_extract"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_dimen"
+        android:layout_marginTop="@dimen/default_dimen"
+        android:layout_marginEnd="@dimen/default_dimen"
+        android:text="Extract"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_select_key"
+        app:layout_constraintStart_toStartOf="@+id/tv_file_key"
+        app:layout_constraintTop_toBottomOf="@+id/x0_edit" />
+
+    <TextView
+        android:id="@+id/tv_process"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Process Status:"
+        app:layout_constraintStart_toStartOf="@+id/btn_extract"
+        app:layout_constraintTop_toBottomOf="@+id/btn_extract" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_process"
+        app:layout_constraintStart_toEndOf="@+id/tv_process"
+        app:layout_constraintTop_toTopOf="@+id/tv_process"
+        tools:text="Status" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_dimen"
+        android:text="Message:"
+        app:layout_constraintStart_toStartOf="@+id/tv_process"
+        app:layout_constraintTop_toBottomOf="@+id/tv_process"
+        app:layout_goneMarginTop="24dp" />
+
+    <EditText
+        android:id="@+id/edit_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="@dimen/default_dimen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_message"
+        app:layout_constraintTop_toBottomOf="@+id/tv_status" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">AudioSteganography</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_home">Pengamanan Pesan Teks Menggunakan Metode MLSB dan Algoritma RLE pada File Audio</string>
+    <string name="audio_file_selected">Audio file has been selected</string>
+    <string name="message_file_selected">Message file has been selected</string>
+    <string name="random_number_generated">Random number has been generated</string>
+    <string name="decompress_completed">Process decompressed has been completed.</string>
+    <string name="compress_completed">Compress file has been completed</string>
+</resources>
