@@ -8,12 +8,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class ExtractViewModel extends ViewModel {
-    private MutableLiveData<byte[]> bytesAudio = new MutableLiveData<>();
+    private MutableLiveData<byte[]> dataAudio = new MutableLiveData<>();
     private MutableLiveData<Integer[]> xnValue = new MutableLiveData<>();
+    private byte[] bytesAudio;
 
     private int[] key = new int[5];
     private Repository repository;
@@ -22,12 +24,19 @@ public class ExtractViewModel extends ViewModel {
         repository = new Repository();
     }
 
-    public void setBytesAudio(ContentResolver contentResolver, Uri uri) {
-        bytesAudio.setValue(repository.readByteFile(contentResolver, uri));
+    public void setBytesAudio(ContentResolver resolver, Uri uri) {
+        bytesAudio = repository.readByteFile(resolver, uri);
+        if (bytesAudio != null) {
+            setDataAudio();
+        }
     }
 
-    public LiveData<byte[]> getBytesAudio() {
-        return bytesAudio;
+    private void setDataAudio() {
+        dataAudio.setValue(Arrays.copyOfRange(bytesAudio, 40, bytesAudio.length));
+    }
+
+    public LiveData<byte[]> getDataAudio() {
+        return dataAudio;
     }
 
     public void setKey(ContentResolver contentResolver, Uri uri) {

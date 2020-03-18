@@ -44,8 +44,8 @@ public class ExtractFragment extends Fragment implements View.OnClickListener {
     private ExtractViewModel viewModel;
     private FileHelper fileAudio;
 
-    private byte[] bytesAudio;
-    private Integer[] xnValue;
+    private byte[] dataAudio;
+    private Integer[] xn;
     private int[] key;
 
     public ExtractFragment() {
@@ -75,11 +75,11 @@ public class ExtractFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        viewModel.getBytesAudio().observe(getViewLifecycleOwner(), bytes -> {
-            if (bytes != null) this.bytesAudio = bytes;
+        viewModel.getDataAudio().observe(getViewLifecycleOwner(), bytes -> {
+            if (bytes != null) this.dataAudio = bytes;
         });
         viewModel.getXnValue().observe(getViewLifecycleOwner(), xnValues -> {
-            if (xnValues != null) this.xnValue = xnValues;
+            if (xnValues != null) this.xn = xnValues;
         });
     }
 
@@ -168,9 +168,9 @@ public class ExtractFragment extends Fragment implements View.OnClickListener {
         StringBuilder builder = new StringBuilder();
         long startTime = System.nanoTime();
         for (int i = key[4] - 1; i >= 0; i--) {
-            if ((Math.abs(bytesAudio[xnValue[i]])) % 2 == 0) {
+            if ((Math.abs(dataAudio[xn[i]])) % 2 == 0) {
                 builder.append('0');
-            } else if ((Math.abs(bytesAudio[xnValue[i]])) % 2 == 1) {
+            } else if ((Math.abs(dataAudio[xn[i]])) % 2 == 1) {
                 builder.append('1');
             }
         }

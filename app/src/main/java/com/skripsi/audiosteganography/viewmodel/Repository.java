@@ -64,7 +64,7 @@ class Repository {
             if (tempXN.size() != 0) {
                 while (tempXN.containsKey(xn1)) {
                     xn1++;
-                    if (xn1 == b) xn1 += 40;
+                    if (xn1 == b) xn1 += 5;
                 }
             }
             tempXN.put(xn1, true);

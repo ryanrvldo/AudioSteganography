@@ -19,10 +19,11 @@
 
     <TextView
         android:id="@+id/tv_filePath"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/btn_selectFile"
         app:layout_constraintStart_toEndOf="@+id/tv_file"
         app:layout_constraintTop_toTopOf="@+id/tv_file"
         tools:text="File Path" />

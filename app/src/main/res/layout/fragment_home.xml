@@ -46,7 +46,7 @@
                 android:gravity="center"
                 android:text="Embedding"
                 android:textColor="@android:color/white"
-                android:textSize="19sp" />
+                android:textSize="18sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -68,7 +68,7 @@
                 android:gravity="center"
                 android:text="Compression"
                 android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -91,7 +91,7 @@
                 android:gravity="center"
                 android:text="Decompression"
                 android:textColor="@android:color/white"
-                android:textSize="13sp" />
+                android:textSize="18sp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView

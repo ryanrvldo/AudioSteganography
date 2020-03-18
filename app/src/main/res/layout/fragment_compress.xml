@@ -19,10 +19,11 @@
 
     <TextView
         android:id="@+id/tv_filePath"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/btn_selectFile"
         app:layout_constraintStart_toEndOf="@+id/tv_file"
         app:layout_constraintTop_toTopOf="@+id/tv_file"
         tools:text="File Path" />
@@ -43,11 +44,13 @@
     <Button
         android:id="@+id/btn_compress"
         style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_dimen"
         android:text="Compress"
         android:textColor="@android:color/white"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_selectFile"
         app:layout_constraintStart_toStartOf="@+id/tv_file"
         app:layout_constraintTop_toBottomOf="@+id/btn_selectFile" />
 

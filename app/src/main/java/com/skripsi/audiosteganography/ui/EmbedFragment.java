@@ -29,6 +29,7 @@ import com.skripsi.audiosteganography.databinding.FragmentEmbedBinding;
 import com.skripsi.audiosteganography.utils.FileHelper;
 import com.skripsi.audiosteganography.viewmodel.EmbedViewModel;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,8 +51,9 @@ public class EmbedFragment extends Fragment implements View.OnClickListener {
     private FileHelper fileAudio;
     private FileHelper fileMessage;
 
-    private byte[] bytesAudio;
-    private Integer[] xnValue;
+    private byte[] dataAudio;
+    private byte[] headerAudio;
+    private Integer[] xn;
     private char[] charsMessage;
 
     public EmbedFragment() {
@@ -83,11 +85,14 @@ public class EmbedFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        viewModel.getBytesAudio().observe(getViewLifecycleOwner(), bytes -> {
-            if (bytes != null) this.bytesAudio = bytes;
+        viewModel.getHeaderAudio().observe(getViewLifecycleOwner(), bytes -> {
+            if (bytes != null) this.headerAudio = bytes;
+        });
+        viewModel.getDataAudio().observe(getViewLifecycleOwner(), bytes -> {
+            if (bytes != null) this.dataAudio = bytes;
         });
         viewModel.getXnValue().observe(getViewLifecycleOwner(), xnValues -> {
-            if (xnValues != null) this.xnValue = xnValues;
+            if (xnValues != null) this.xn = xnValues;
         });
     }
 
@@ -157,7 +162,7 @@ public class EmbedFragment extends Fragment implements View.OnClickListener {
 
     private void readFileAudio(Uri uri) {
         fileAudio.setPick(uri, Build.VERSION.SDK_INT);
-        viewModel.setByteAudio(requireContext().getContentResolver(), uri);
+        viewModel.setBytesAudio(requireContext().getContentResolver(), uri);
         viewModel.setFileInfo(fileAudio.getFilePath());
         String fileName = viewModel.getFileName() + "." + viewModel.getFileExt();
         binding.tvAudioPath.setText(fileName);
@@ -173,19 +178,19 @@ public class EmbedFragment extends Fragment implements View.OnClickListener {
 
     private void randomMWC() {
         Random random = new Random();
-        binding.aEdit.setText(String.valueOf(random.nextInt(1000)));
-        binding.bEdit.setText(String.valueOf(random.nextInt(1000)));
-        binding.c0Edit.setText(String.valueOf(random.nextInt(1000)));
-        binding.x0Edit.setText(String.valueOf(random.nextInt(1000)));
+        binding.aEdit.setText(String.valueOf(random.nextInt()));
+        binding.bEdit.setText(String.valueOf(random.nextInt()));
+        binding.c0Edit.setText(String.valueOf(random.nextInt()));
+        binding.x0Edit.setText(String.valueOf(random.nextInt()));
     }
 
     private void embedData() {
         long startTime = System.nanoTime();
         for (int i = 0; i < charsMessage.length; i++) {
-            if (charsMessage[i] == '1' && ((Math.abs(bytesAudio[xnValue[i]])) % 2 == 0)) {
-                bytesAudio[xnValue[i]] += 1;
-            } else if (charsMessage[i] == '0' && ((Math.abs(bytesAudio[xnValue[i]])) % 2 == 1)) {
-                bytesAudio[xnValue[i]] -= 1;
+            if (charsMessage[i] == '1' && ((Math.abs(dataAudio[xn[i]])) % 2 == 0)) {
+                dataAudio[xn[i]] += 1;
+            } else if (charsMessage[i] == '0' && ((Math.abs(dataAudio[xn[i]])) % 2 == 1)) {
+                dataAudio[xn[i]] -= 1;
             }
         }
         long endTime = System.nanoTime();
@@ -195,10 +200,17 @@ public class EmbedFragment extends Fragment implements View.OnClickListener {
 
         File path = requireContext().getExternalFilesDir(null);
         File file = new File(path, viewModel.getFileName() + "[1]." + viewModel.getFileExt());
+
         try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            outputStream.write(headerAudio);
+            outputStream.write(dataAudio);
+            outputStream.flush();
+
             FileOutputStream output = new FileOutputStream(file);
-            output.write(bytesAudio);
+            output.write(outputStream.toByteArray());
             output.close();
+            outputStream.close();
             Toast.makeText(getContext(), "Success.\nFile path: " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             Toast.makeText(getContext(), "Failed to save file!", Toast.LENGTH_LONG).show();

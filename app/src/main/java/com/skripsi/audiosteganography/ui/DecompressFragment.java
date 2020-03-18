@@ -33,7 +33,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 
 
 /**
@@ -50,8 +49,8 @@ public class DecompressFragment extends Fragment implements View.OnClickListener
 
     private FileHelper fileAudio;
 
-    private byte[] bytesAudio;
-    private byte[] bytesAudioCompressed;
+    private byte[] initBytes;
+    private byte[] resultBytes;
 
     public DecompressFragment() {
         // Required empty public constructor
@@ -78,12 +77,8 @@ public class DecompressFragment extends Fragment implements View.OnClickListener
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        viewModel.getBytesAudioCompressed().observe(getViewLifecycleOwner(), bytes -> {
-            if (bytes != null) bytesAudioCompressed = bytes;
-        });
-
-        viewModel.getBytesAudio().observe(getViewLifecycleOwner(), bytes -> {
-            if (bytes != null) bytesAudio = bytes;
+        viewModel.getInitBytes().observe(getViewLifecycleOwner(), bytes -> {
+            if (bytes != null) this.initBytes = bytes;
         });
     }
 
@@ -99,7 +94,7 @@ public class DecompressFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.btn_decompress:
                 long startTime = System.nanoTime();
-                viewModel.setBytesAudio(decompressFile());
+                decompressFile();
                 saveFile();
                 long endTime = System.nanoTime();
                 long totalTime = endTime - startTime;
@@ -129,46 +124,57 @@ public class DecompressFragment extends Fragment implements View.OnClickListener
     private void readFileAudio(Uri uri) {
         viewModel.setFileInfo("");
         fileAudio.setPick(uri, Build.VERSION.SDK_INT);
-        viewModel.setBytesAudioCompressed(requireContext().getContentResolver(), uri);
+        viewModel.setInitBytes(requireContext().getContentResolver(), uri);
         viewModel.setFileInfo(fileAudio.getFilePath());
         String fileName = viewModel.getFileName() + "." + viewModel.getFileExt();
         binding.tvFilePath.setText(fileName);
         Toast.makeText(getContext(), "Success read file audio", Toast.LENGTH_LONG).show();
     }
 
-    private byte[] decompressFile() {
-        byte sign = '~';
-        byte length;
-        int len;
+    private void decompressFile() {
+        byte sign = '#';
         ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-        for (int i = 0; i < bytesAudioCompressed.length; i++) {
-            byte current = bytesAudioCompressed[i];
-            Log.d(TAG, "current: " + current);
-            if ((current == sign) && (bytesAudioCompressed[i + 1] > '2') && (bytesAudioCompressed[i + 1] < '9')) {
-                length = bytesAudioCompressed[i + 1];
-                Log.d(TAG, "length: " + length);
-                len = Integer.parseInt(String.valueOf((char) length));
-                Log.d(TAG, "len: " + len);
-                current = bytesAudioCompressed[i + 2];
-                Log.d(TAG, "current: " + current);
-                for (int j = 0; j < len; j++) {
+        StringBuilder charCount = new StringBuilder();
+        int count = 0;
+        boolean flag = false;
+        for (byte current : initBytes) {
+            if (!flag) {
+                if (current == sign) {
+                    flag = true;
+                } else {
                     byteArray.write(current);
+                    charCount = new StringBuilder();
                 }
-                i += 2;
             } else {
-                byteArray.write(current);
-                Log.d(TAG, "current: " + current);
+                if (!Character.isDigit(current)) {
+                    if (count > 0) {
+                        for (int i = 0; i < count; i++) {
+                            byteArray.write(current);
+                        }
+                        charCount = new StringBuilder();
+                        count = 0;
+                        flag = false;
+                    } else {
+                        byteArray.write(sign);
+                        byteArray.write(current);
+                        flag = false;
+                    }
+                } else {
+                    charCount.append((char) current);
+                    count = Integer.parseInt(charCount.toString());
+                }
             }
         }
         try {
             byteArray.flush();
+            resultBytes = byteArray.toByteArray();
             byteArray.close();
             Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             Toast.makeText(getContext(), "Decompression getting error", Toast.LENGTH_SHORT).show();
         }
-        Log.d(TAG, "byteDecompressed: " + Arrays.toString(byteArray.toByteArray()));
-        return byteArray.toByteArray();
+        Log.d(TAG, "initFile: " + initBytes.length);
+        Log.d(TAG, "decompressFile: " + resultBytes.length);
     }
 
     private void saveFile() {
@@ -177,7 +183,7 @@ public class DecompressFragment extends Fragment implements View.OnClickListener
             File file = new File(path, viewModel.getFileName() + "[3]." + viewModel.getFileExt());
             try {
                 FileOutputStream output = new FileOutputStream(file);
-                output.write(bytesAudio);
+                output.write(resultBytes);
                 output.close();
                 Toast.makeText(getContext(), "Success.\nFile path: " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
             } catch (IOException e) {

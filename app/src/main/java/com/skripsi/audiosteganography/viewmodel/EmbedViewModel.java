@@ -8,11 +8,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.util.Arrays;
+
 public class EmbedViewModel extends ViewModel {
     private static final String TAG = "EMBED";
 
-    private MutableLiveData<byte[]> bytesAudio = new MutableLiveData<>();
+    private MutableLiveData<byte[]> headerAudio = new MutableLiveData<>();
+    private MutableLiveData<byte[]> dataAudio = new MutableLiveData<>();
     private MutableLiveData<Integer[]> xnValue = new MutableLiveData<>();
+    private byte[] bytesAudio;
 
     private String message;
     private Repository repository;
@@ -21,12 +25,28 @@ public class EmbedViewModel extends ViewModel {
         repository = new Repository();
     }
 
-    public void setByteAudio(ContentResolver contentResolver, Uri uri) {
-        bytesAudio.setValue(repository.readByteFile(contentResolver, uri));
+    public void setBytesAudio(ContentResolver resolver, Uri uri) {
+        bytesAudio = repository.readByteFile(resolver, uri);
+        if (bytesAudio != null) {
+            setHeaderAudio();
+            setDataAudio();
+        }
     }
 
-    public LiveData<byte[]> getBytesAudio() {
-        return bytesAudio;
+    private void setDataAudio() {
+        dataAudio.setValue(Arrays.copyOfRange(bytesAudio, 40, bytesAudio.length));
+    }
+
+    public LiveData<byte[]> getDataAudio() {
+        return dataAudio;
+    }
+
+    private void setHeaderAudio() {
+        headerAudio.setValue(Arrays.copyOfRange(bytesAudio, 0, 40));
+    }
+
+    public LiveData<byte[]> getHeaderAudio() {
+        return headerAudio;
     }
 
     public void setMessage(ContentResolver contentResolver, Uri uri) {

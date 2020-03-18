@@ -11,28 +11,20 @@ public class CompressViewModel extends ViewModel {
     public static final String TAG = "COMPRESS";
 
     private Repository repository;
-    private MutableLiveData<byte[]> bytesAudio = new MutableLiveData<>();
-    private MutableLiveData<byte[]> bytesAudioCompressed = new MutableLiveData<>();
+    private MutableLiveData<byte[]> initBytes = new MutableLiveData<>();
 
     public CompressViewModel() {
         repository = new Repository();
     }
 
-    public void setByteAudio(ContentResolver contentResolver, Uri uri) {
-        bytesAudio.setValue(repository.readByteFile(contentResolver, uri));
+    public void setInitBytes(ContentResolver contentResolver, Uri uri) {
+        initBytes.setValue(repository.readByteFile(contentResolver, uri));
     }
 
-    public LiveData<byte[]> getBytesAudio() {
-        return bytesAudio;
+    public LiveData<byte[]> getInitBytes() {
+        return initBytes;
     }
 
-    public void setBytesAudioCompressed(byte[] bytes) {
-        bytesAudioCompressed.setValue(bytes);
-    }
-
-    public LiveData<byte[]> getBytesAudioCompressed() {
-        return bytesAudioCompressed;
-    }
 
     public void setFileInfo(String file) {
         repository.setFileInfo(file);
