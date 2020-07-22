@@ -8,45 +8,26 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.util.Arrays;
+import com.skripsi.audiosteganography.model.FileData;
+import com.skripsi.audiosteganography.model.PseudoRandomNumber;
 
 public class EmbedViewModel extends ViewModel {
-    private static final String TAG = "EMBED";
-
-    private MutableLiveData<byte[]> headerAudio = new MutableLiveData<>();
-    private MutableLiveData<byte[]> dataAudio = new MutableLiveData<>();
+    private MutableLiveData<FileData> fileData = new MutableLiveData<>();
     private MutableLiveData<Integer[]> xnValue = new MutableLiveData<>();
-    private byte[] bytesAudio;
-
     private String message;
+
     private Repository repository;
 
     public EmbedViewModel() {
         repository = new Repository();
     }
 
-    public void setBytesAudio(ContentResolver resolver, Uri uri) {
-        bytesAudio = repository.readByteFile(resolver, uri);
-        if (bytesAudio != null) {
-            setHeaderAudio();
-            setDataAudio();
-        }
+    public void setFileData(ContentResolver resolver, Uri uri, String filePath) {
+        fileData.setValue(repository.getFileData(resolver, uri, filePath));
     }
 
-    private void setDataAudio() {
-        dataAudio.setValue(Arrays.copyOfRange(bytesAudio, 40, bytesAudio.length));
-    }
-
-    public LiveData<byte[]> getDataAudio() {
-        return dataAudio;
-    }
-
-    private void setHeaderAudio() {
-        headerAudio.setValue(Arrays.copyOfRange(bytesAudio, 0, 40));
-    }
-
-    public LiveData<byte[]> getHeaderAudio() {
-        return headerAudio;
+    public LiveData<FileData> getFileData() {
+        return fileData;
     }
 
     public void setMessage(ContentResolver contentResolver, Uri uri) {
@@ -71,30 +52,16 @@ public class EmbedViewModel extends ViewModel {
         return builder.toString().toCharArray();
     }
 
-    public void setXnValue(int length, int a, int b, int c0, int x0) {
-        repository.setKey(a, b, c0, x0);
-        xnValue.setValue(repository.getXN(length));
+    public void setXnValue(PseudoRandomNumber randomNumber) {
+        xnValue.setValue(repository.getXN(randomNumber));
     }
 
     public LiveData<Integer[]> getXnValue() {
         return xnValue;
     }
 
-    public void saveKey(Context context) {
-        repository.saveKey(context);
+    public void saveKey(Context context, PseudoRandomNumber randomNumber) {
+        repository.saveKey(context, randomNumber);
     }
-
-    public void setFileInfo(String file) {
-        repository.setFileInfo(file);
-    }
-
-    public String getFileExt() {
-        return repository.getFileExt();
-    }
-
-    public String getFileName() {
-        return repository.getFileName();
-    }
-
 
 }

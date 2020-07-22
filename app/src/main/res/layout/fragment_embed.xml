@@ -1,234 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="@dimen/default_dimen"
     tools:context=".ui.EmbedFragment">
 
-    <TextView
-        android:id="@+id/tv_file_audio"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/default_dimen"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:text="File:"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:isScrollContainer="true">
 
-    <TextView
-        android:id="@+id/tv_audio_path"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/btn_selectAudio"
-        app:layout_constraintStart_toEndOf="@+id/tv_file_audio"
-        app:layout_constraintTop_toTopOf="@+id/tv_file_audio"
-        tools:text="File Path" />
+        <TextView
+            android:id="@+id/tv_file_audio"
+            style="@style/Widget.Custom.Title.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_dimen"
+            android:layout_marginTop="8dp"
+            android:text="@string/file"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_select_message"
+            tools:layout_editor_absoluteY="16dp" />
 
-    <Button
-        android:id="@+id/btn_selectAudio"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/default_dimen"
-        android:text="Select Audio"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_audio_path"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_audio_path" />
+        <TextView
+            android:id="@+id/tv_audio_path"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="@dimen/default_dimen"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_file_audio"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_file_audio"
+            app:layout_constraintTop_toTopOf="@+id/tv_file_audio"
+            tools:text="File Path" />
 
-    <TextView
-        android:id="@+id/tv_file_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Message:"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/tv_file_audio"
-        app:layout_constraintTop_toBottomOf="@+id/btn_selectAudio" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_select_audio"
+            style="@style/Widget.Custom.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_audio"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_audio_path"
+            app:layout_constraintTop_toBottomOf="@+id/tv_file_audio" />
 
-    <EditText
-        android:id="@+id/edit_message"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:layout_marginEnd="48dp"
-        android:hint="Your message"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_file_message"
-        app:layout_constraintTop_toBottomOf="@+id/tv_file_message" />
+        <TextView
+            android:id="@+id/tv_file_message"
+            style="@style/Widget.Custom.Title.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_dimen"
+            android:text="@string/message"
+            app:layout_constraintStart_toStartOf="@+id/tv_file_audio"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btn_selectMessage"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/default_dimen"
-        android:text="Select Message"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_file_message"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_file_message" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_message"
+            style="@style/Widget.Custom.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/default_dimen"
+            android:layout_marginTop="8dp"
+            app:counterEnabled="true"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_file_message">
 
-    <TextView
-        android:id="@+id/tv_mwc"
-        style="@style/TextAppearance.MaterialComponents.Headline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Multiply with Carry Generator"
-        app:layout_constraintStart_toStartOf="@+id/tv_file_message"
-        app:layout_constraintTop_toBottomOf="@+id/edit_message" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_txt_message"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textMultiLine"
+                android:maxLines="10" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_mwc_a"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:text="a:"
-        app:layout_constraintBottom_toBottomOf="@+id/a_edit"
-        app:layout_constraintStart_toStartOf="@+id/tv_mwc"
-        app:layout_constraintTop_toTopOf="@+id/a_edit" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_select_message"
+            style="@style/Widget.Custom.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select_message"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/input_layout_message"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_message" />
 
-    <EditText
-        android:id="@+id/a_edit"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:autofillHints="a"
-        android:hint="a"
-        android:inputType="number"
-        app:layout_constraintStart_toEndOf="@+id/tv_mwc_a"
-        app:layout_constraintTop_toBottomOf="@+id/tv_mwc" />
+        <TextView
+            android:id="@+id/tv_mwc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_dimen"
+            android:fontFamily="@font/asap_bold"
+            android:text="@string/multiply_with_carry_generator"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_file_message"
+            app:layout_constraintTop_toBottomOf="@+id/btn_select_audio" />
 
-    <TextView
-        android:id="@+id/tv_mwc_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:text="b:"
-        app:layout_constraintBottom_toBottomOf="@+id/b_edit"
-        app:layout_constraintStart_toStartOf="@+id/tv_mwc"
-        app:layout_constraintTop_toTopOf="@+id/b_edit" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_a_key"
+            style="@style/Widget.Custom.TextInputLayout"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_dimen"
+            android:layout_marginTop="@dimen/default_dimen"
+            android:hint="@string/mwc_a"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_mwc">
 
-    <EditText
-        android:id="@+id/b_edit"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:hint="b"
-        android:inputType="number"
-        app:layout_constraintStart_toEndOf="@+id/tv_mwc_a"
-        app:layout_constraintTop_toBottomOf="@+id/a_edit" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_txt_a_key"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="number"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_mwc_c0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:text="C0:"
-        app:layout_constraintBottom_toBottomOf="@+id/c0_edit"
-        app:layout_constraintStart_toStartOf="@+id/tv_mwc"
-        app:layout_constraintTop_toTopOf="@+id/c0_edit" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_b_key"
+            style="@style/Widget.Custom.TextInputLayout"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_dimen"
+            android:hint="@string/mwc_b"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_a_key">
 
-    <EditText
-        android:id="@+id/c0_edit"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:hint="c0"
-        android:inputType="number"
-        app:layout_constraintStart_toEndOf="@+id/tv_mwc_c0"
-        app:layout_constraintTop_toBottomOf="@+id/b_edit" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_txt_b_key"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="number"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_mwc_x0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:text="X0:"
-        app:layout_constraintBottom_toBottomOf="@+id/x0_edit"
-        app:layout_constraintStart_toStartOf="@+id/tv_mwc"
-        app:layout_constraintTop_toTopOf="@+id/x0_edit" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_c0_key"
+            style="@style/Widget.Custom.TextInputLayout"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_dimen"
+            android:hint="@string/mwc_c0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_b_key">
 
-    <EditText
-        android:id="@+id/x0_edit"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:hint="x0"
-        android:inputType="number"
-        app:layout_constraintStart_toEndOf="@+id/tv_mwc_x0"
-        app:layout_constraintTop_toBottomOf="@+id/c0_edit" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_txt_c0_key"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="number"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/btn_random"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:text="Random MWC"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/x0_edit"
-        app:layout_constraintTop_toBottomOf="@+id/tv_mwc_x0" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_x0_key"
+            style="@style/Widget.Custom.TextInputLayout"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_dimen"
+            android:hint="@string/mwc_x0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_c0_key">
 
-    <Button
-        android:id="@+id/btn_generate"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="@dimen/default_dimen"
-        android:text="Generate"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/btn_random"
-        app:layout_constraintTop_toBottomOf="@+id/tv_mwc_x0" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_txt_x0_key"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="number"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_process"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Process Status:"
-        app:layout_constraintStart_toStartOf="@+id/tv_mwc_x0"
-        app:layout_constraintTop_toBottomOf="@+id/btn_random" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_random"
+            style="@style/Widget.Custom.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/random_key"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="@+id/input_layout_x0_key"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_x0_key" />
 
-    <TextView
-        android:id="@+id/tv_status"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_process"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_process"
-        app:layout_constraintTop_toTopOf="@+id/tv_process"
-        android:layout_marginEnd="@dimen/default_dimen"
-        tools:text="Status" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_process"
+            style="@style/Widget.Custom.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="@dimen/default_dimen"
+            android:text="@string/embed_data"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_random" />
 
-    <Button
-        android:id="@+id/btn_process"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="40dp"
-        android:text="Embed Data"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_status" />
+        <TextView
+            android:id="@+id/tv_process"
+            style="@style/Widget.Custom.Title.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_dimen"
+            android:layout_marginTop="@dimen/default_dimen"
+            android:text="@string/process_status"
+            app:layout_constraintBottom_toTopOf="@+id/tv_status"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_process" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/default_dimen"
+            android:layout_marginBottom="@dimen/default_dimen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_process"
+            tools:text="Status" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

@@ -38,6 +38,7 @@ public class HomeFragment extends Fragment {
         binding.btnCompressMenu.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_compressFragment));
         binding.btnDecompressMenu.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_decompressFragment));
         binding.btnExtractMenu.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_extractFragment));
+        binding.btnAboutMenu.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_homeFragment_to_aboutFragment));
     }
 
     @Override

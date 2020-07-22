@@ -1,12 +1,46 @@
 <resources>
     <string name="app_name">AudioSteganography</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_home">Pengamanan Pesan Teks Menggunakan Metode MLSB dan Algoritma RLE pada File Audio</string>
-    <string name="audio_file_selected">Audio file has been selected</string>
-    <string name="message_file_selected">Message file has been selected</string>
-    <string name="random_number_generated">Random number has been generated</string>
-    <string name="decompress_completed">Process decompressed has been completed.</string>
-    <string name="compress_completed">Compress file has been completed</string>
+    <string name="audio_file_selected">Audio file has been selected.</string>
+    <string name="message_file_selected">Message file has been selected.</string>
+    <string name="random_number_generated">Random number has been generated.</string>
+    <string name="about_description">Aplikasi ini dibuat sebagai bentuk implementasi dari penelitian atau tugas akhir pengembang. Sistem ini bekerja dengan menyisipkan pesan teks ke dalam file audio (*.wav). Kemudian file yang sudah disisipkan akan dilakukan kompresi file dengan menggunakan algoritma Run Length Encoding (RLE). Untuk mendapatkan pesan kembali lakukan proses dekompresi terlebih dahulu dan lakukan proses pengekstrakan pesan.</string>
+    <string name="author">Rian Rivaldo\n161401122</string>
+    <string name="description_fasilkom_logo">fasilkom_ti_logo</string>
+    <string name="key_file_selected">Key file has been selected.</string>
+    <string name="embed_process_finished">Process has been finished.\nMSE: %f\nPSNR: %f\nRunning Time: %f seconds</string>
+    <string name="extraction_process_finished">Process has been finished.\nRunning Time: %f seconds</string>
+    <string name="compress_process_finished">Process has been finished.\nCR: %f\nSS: %f\nBitrate: %f\nRunning Time: %f seconds</string>
+    <string name="decompress_process_finished">Process has been finished.\nRunning Time: %f seconds</string>
+    <string name="read_audio_success">Success read audio file.</string>
+    <string name="read_message_success">Success read message file.</string>
+    <string name="input_message_warning">Please input message first.</string>
+    <string name="input_audio_warning">Please input audio file first.</string>
+    <string name="input_seed_warning">Please input seed value of Multiply With Carry Generator.</string>
+    <string name="input_message_audio_warning">Please input message and audio file first.</string>
+    <string name="permission_denied_warning">Permission denied. Please allow permission to continue.</string>
+    <string name="success_save_file">Process is successful.\nFile saved in: %s</string>
+    <string name="failed_save_file">Sorry failed to save result file. Error: </string>
+    <string name="process_failed_warning">Sorry, process is getting error. Please try again. Error: </string>
+    <string name="read_key_success">Success read key file.</string>
+    <string name="input_key_warning">Please input key file first.</string>
+    <string name="file">File:</string>
+    <string name="select_file">Select File</string>
+    <string name="compress_file">Compress File</string>
+    <string name="process_status">Process Status:</string>
+    <string name="decompress_file">Decompress File</string>
+    <string name="select_audio">Select Audio</string>
+    <string name="message">Message:</string>
+    <string name="select_message">Select Message</string>
+    <string name="multiply_with_carry_generator">Multiply with Carry Generator</string>
+    <string name="mwc_a">a</string>
+    <string name="mwc_b">b</string>
+    <string name="mwc_c0">C0</string>
+    <string name="mwc_x0">X0</string>
+    <string name="random_key">Random Key</string>
+    <string name="embed_data">Embed Data</string>
+    <string name="key">Key:</string>
+    <string name="select_key">Select Key</string>
+    <string name="extract_message">Extract Message</string>
 </resources>

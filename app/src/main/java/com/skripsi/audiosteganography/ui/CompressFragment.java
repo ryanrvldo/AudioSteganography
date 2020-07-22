@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,6 +24,7 @@ import androidx.navigation.Navigation;
 
 import com.skripsi.audiosteganography.R;
 import com.skripsi.audiosteganography.databinding.FragmentCompressBinding;
+import com.skripsi.audiosteganography.model.FileData;
 import com.skripsi.audiosteganography.utils.FileHelper;
 import com.skripsi.audiosteganography.viewmodel.CompressViewModel;
 
@@ -40,17 +39,18 @@ import java.io.IOException;
  */
 public class CompressFragment extends Fragment implements View.OnClickListener {
 
-    private static final String TAG = "COMPRESS";
     private static final int PERMISSION_REQUEST_CODE = 102;
     private static final int AUDIO_REQUEST_CODE = 202;
 
     private FragmentCompressBinding binding;
     private CompressViewModel viewModel;
 
-    private FileHelper fileAudio;
+    private FileHelper fileHelperAudio;
 
+    private FileData fileData;
     private byte[] initBytes;
     private byte[] resultBytes;
+    private double runningTime;
 
     public CompressFragment() {
         // Required empty public constructor
@@ -71,36 +71,34 @@ public class CompressFragment extends Fragment implements View.OnClickListener {
         binding.btnCompress.setOnClickListener(this);
 
         viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(CompressViewModel.class);
-        fileAudio = new FileHelper(getContext());
-    }
+        fileHelperAudio = new FileHelper(requireActivity());
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        viewModel.getInitBytes().observe(getViewLifecycleOwner(), bytes -> {
-            if (bytes != null) this.initBytes = bytes;
+        viewModel.getFileData().observe(getViewLifecycleOwner(), data -> {
+            if (data != null) {
+                this.fileData = data;
+                this.initBytes = data.getFileBytes();
+                binding.tvFilePath.setText(String.format("%s.%s", fileData.getFileName(), fileData.getFileExt()));
+            }
         });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_selectFile:
-                if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            case R.id.btn_select_file:
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     selectFile();
                 } else {
-                    ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
                 }
                 break;
             case R.id.btn_compress:
-                long startTime = System.nanoTime();
-                compressFile();
-                saveFile();
-                long endTime = System.nanoTime();
-                long totalTime = endTime - startTime;
-                double totalInSecond = (double) totalTime / 1_000_000_000;
-                Log.d(TAG, String.format("Process compress in %f seconds\n", totalInSecond));
+                if (initBytes != null) {
+                    compressFile();
+                    saveFile();
+                } else {
+                    Toast.makeText(requireContext(), R.string.input_audio_warning, Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
@@ -122,21 +120,19 @@ public class CompressFragment extends Fragment implements View.OnClickListener {
     }
 
     private void readFileAudio(Uri uri) {
-        fileAudio.setPick(uri, Build.VERSION.SDK_INT);
-        viewModel.setInitBytes(requireContext().getContentResolver(), uri);
-        viewModel.setFileInfo(fileAudio.getFilePath());
-        String fileName = viewModel.getFileName() + "." + viewModel.getFileExt();
-        binding.tvFilePath.setText(fileName);
-        Toast.makeText(getContext(), "Success read file audio", Toast.LENGTH_SHORT).show();
+        fileHelperAudio.setPick(uri, Build.VERSION.SDK_INT);
+        viewModel.setFileData(requireContext().getContentResolver(), uri, fileHelperAudio.getFilePath());
+        Toast.makeText(getContext(), R.string.read_audio_success, Toast.LENGTH_SHORT).show();
     }
 
     private void compressFile() {
-        ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-        StringBuilder strCount = new StringBuilder();
-        byte sign = '#';
-        byte current = initBytes[0];
-        int count = 1;
+        long startTime = System.nanoTime();
         try {
+            ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+            StringBuilder strCount = new StringBuilder();
+            byte sign = '#';
+            byte current = initBytes[0];
+            int count = 1;
             for (int i = 1; i < initBytes.length; i++) {
                 if (current == initBytes[i]) {
                     count++;
@@ -165,25 +161,44 @@ public class CompressFragment extends Fragment implements View.OnClickListener {
             byteArray.flush();
             resultBytes = byteArray.toByteArray();
             byteArray.close();
-            Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
-            Toast.makeText(getContext(), "Compression getting error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.process_failed_warning) + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        Log.d(TAG, "initFile: " + initBytes.length);
-        Log.d(TAG, "compressFile: " + resultBytes.length);
+        long endTime = System.nanoTime();
+        long totalTime = endTime - startTime;
+        runningTime = (double) totalTime / 1_000_000_000;
+        showResult();
     }
 
     private void saveFile() {
         try {
             File path = requireContext().getExternalFilesDir(null);
-            File file = new File(path, viewModel.getFileName() + "[2]." + viewModel.getFileExt());
+            File file = new File(path, fileData.getFileName() + "[2]." + fileData.getFileExt());
             FileOutputStream output = new FileOutputStream(file);
             output.write(resultBytes);
             output.close();
-            binding.tvStatus.setText(getString(R.string.compress_completed));
-            Toast.makeText(getContext(), "Success.\nFile path: " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), String.format(getString(R.string.success_save_file), file.getAbsolutePath()), Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
-            Toast.makeText(getContext(), "Failed.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), getString(R.string.failed_save_file) + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showResult() {
+        double CR = ((double) initBytes.length) / resultBytes.length;
+        double SS = (1 - ((double) resultBytes.length / initBytes.length)) * 100;
+        double BR = (double) resultBytes.length / 16;
+        binding.tvStatus.setText(String.format(getString(R.string.compress_process_finished), CR, SS, BR, runningTime));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                selectFile();
+            } else {
+                Toast.makeText(requireContext(), R.string.permission_denied_warning, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

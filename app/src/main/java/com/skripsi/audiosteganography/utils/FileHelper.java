@@ -1,7 +1,8 @@
 package com.skripsi.audiosteganography.utils;
 
-import android.content.Context;
 import android.net.Uri;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.hbisoft.pickit.PickiT;
 import com.hbisoft.pickit.PickiTCallbacks;
@@ -10,8 +11,8 @@ public class FileHelper implements PickiTCallbacks {
     private PickiT pick;
     private String filePath;
 
-    public FileHelper(Context context) {
-        pick = new PickiT(context, this);
+    public FileHelper(FragmentActivity activity) {
+        pick = new PickiT(activity, this, activity);
     }
 
     public void setPick(Uri uri, int apiLevel) {
@@ -24,6 +25,11 @@ public class FileHelper implements PickiTCallbacks {
 
     public String getFilePath() {
         return filePath;
+    }
+
+    @Override
+    public void PickiTonUriReturned() {
+
     }
 
     @Override

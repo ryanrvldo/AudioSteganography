@@ -2,12 +2,11 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_navigation"
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.skripsi.audiosteganography.ui.HomeFragment"
-        android:label="Home"
+        android:label="Audio Steganography"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_embedFragment"
@@ -33,13 +32,16 @@
             android:id="@+id/action_homeFragment_to_extractFragment"
             app:destination="@id/extractFragment"
             app:popUpTo="@id/homeFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/embedFragment"
         android:name="com.skripsi.audiosteganography.ui.EmbedFragment"
-        android:label="Embedding Data"
-        tools:layout="@layout/fragment_embed" >
+        android:label="Embed Message"
+        tools:layout="@layout/fragment_embed">
         <action
             android:id="@+id/action_embedFragment_to_compressFragment"
             app:destination="@id/compressFragment" />
@@ -57,7 +59,8 @@
     <fragment
         android:id="@+id/decompressFragment"
         android:name="com.skripsi.audiosteganography.ui.DecompressFragment"
-        android:label="Decompress File" >
+        android:label="Decompress File"
+        tools:layout="@layout/fragment_decompress">
         <action
             android:id="@+id/action_decompressFragment_to_extractFragment"
             app:destination="@id/extractFragment" />
@@ -65,5 +68,11 @@
     <fragment
         android:id="@+id/extractFragment"
         android:name="com.skripsi.audiosteganography.ui.ExtractFragment"
-        android:label="Extract Message" />
+        android:label="Extract Message"
+        tools:layout="@layout/fragment_extract" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.skripsi.audiosteganography.ui.AboutFragment"
+        android:label="About"
+        tools:layout="@layout/fragment_about" />
 </navigation>

@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,6 +24,7 @@ import androidx.navigation.Navigation;
 
 import com.skripsi.audiosteganography.R;
 import com.skripsi.audiosteganography.databinding.FragmentDecompressBinding;
+import com.skripsi.audiosteganography.model.FileData;
 import com.skripsi.audiosteganography.utils.FileHelper;
 import com.skripsi.audiosteganography.viewmodel.DecompressViewModel;
 
@@ -40,15 +39,15 @@ import java.io.IOException;
  */
 public class DecompressFragment extends Fragment implements View.OnClickListener {
 
-    private static final String TAG = "DECOMPRESS";
     private static final int PERMISSION_REQUEST_CODE = 103;
     private static final int AUDIO_REQUEST_CODE = 203;
 
     private FragmentDecompressBinding binding;
     private DecompressViewModel viewModel;
 
-    private FileHelper fileAudio;
+    private FileHelper fileHelperAudio;
 
+    private FileData fileData;
     private byte[] initBytes;
     private byte[] resultBytes;
 
@@ -70,37 +69,34 @@ public class DecompressFragment extends Fragment implements View.OnClickListener
         binding.btnDecompress.setOnClickListener(this);
 
         viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(DecompressViewModel.class);
-        fileAudio = new FileHelper(getContext());
-    }
+        fileHelperAudio = new FileHelper(requireActivity());
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        viewModel.getInitBytes().observe(getViewLifecycleOwner(), bytes -> {
-            if (bytes != null) this.initBytes = bytes;
+        viewModel.getFileData().observe(getViewLifecycleOwner(), data -> {
+            if (data != null) {
+                this.fileData = data;
+                this.initBytes = data.getFileBytes();
+                binding.tvFilePath.setText(String.format("%s.%s", data.getFileName(), data.getFileExt()));
+            }
         });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_selectFile:
+            case R.id.btn_select_file:
                 if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     selectFile();
                 } else {
-                    ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
                 }
                 break;
             case R.id.btn_decompress:
-                long startTime = System.nanoTime();
-                decompressFile();
-                saveFile();
-                long endTime = System.nanoTime();
-                long totalTime = endTime - startTime;
-                double totalInSecond = (double) totalTime / 1_000_000_000;
-                binding.tvStatus.setText(R.string.decompress_completed);
-                Log.d(TAG, String.format("Process decompress file in %f seconds\n", totalInSecond));
+                if (initBytes != null) {
+                    decompressFile();
+                    saveFile();
+                } else {
+                    Toast.makeText(requireContext(), R.string.input_audio_warning, Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }
@@ -122,16 +118,13 @@ public class DecompressFragment extends Fragment implements View.OnClickListener
     }
 
     private void readFileAudio(Uri uri) {
-        viewModel.setFileInfo("");
-        fileAudio.setPick(uri, Build.VERSION.SDK_INT);
-        viewModel.setInitBytes(requireContext().getContentResolver(), uri);
-        viewModel.setFileInfo(fileAudio.getFilePath());
-        String fileName = viewModel.getFileName() + "." + viewModel.getFileExt();
-        binding.tvFilePath.setText(fileName);
-        Toast.makeText(getContext(), "Success read file audio", Toast.LENGTH_LONG).show();
+        fileHelperAudio.setPick(uri, Build.VERSION.SDK_INT);
+        viewModel.setFileData(requireContext().getContentResolver(), uri, fileHelperAudio.getFilePath());
+        Toast.makeText(getContext(), R.string.read_audio_success, Toast.LENGTH_LONG).show();
     }
 
     private void decompressFile() {
+        long startTime = System.nanoTime();
         byte sign = '#';
         ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
         StringBuilder charCount = new StringBuilder();
@@ -153,12 +146,11 @@ public class DecompressFragment extends Fragment implements View.OnClickListener
                         }
                         charCount = new StringBuilder();
                         count = 0;
-                        flag = false;
                     } else {
                         byteArray.write(sign);
                         byteArray.write(current);
-                        flag = false;
                     }
+                    flag = false;
                 } else {
                     charCount.append((char) current);
                     count = Integer.parseInt(charCount.toString());
@@ -169,28 +161,38 @@ public class DecompressFragment extends Fragment implements View.OnClickListener
             byteArray.flush();
             resultBytes = byteArray.toByteArray();
             byteArray.close();
-            Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
-            Toast.makeText(getContext(), "Decompression getting error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.process_failed_warning + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
-        Log.d(TAG, "initFile: " + initBytes.length);
-        Log.d(TAG, "decompressFile: " + resultBytes.length);
+        long endTime = System.nanoTime();
+        long totalTime = endTime - startTime;
+        double totalInSecond = (double) totalTime / 1_000_000_000;
+        binding.tvStatus.setText(String.format(getString(R.string.decompress_process_finished), totalInSecond));
     }
 
     private void saveFile() {
-        if (getContext() != null) {
-            File path = getContext().getExternalFilesDir(null);
-            File file = new File(path, viewModel.getFileName() + "[3]." + viewModel.getFileExt());
-            try {
-                FileOutputStream output = new FileOutputStream(file);
-                output.write(resultBytes);
-                output.close();
-                Toast.makeText(getContext(), "Success.\nFile path: " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
-            } catch (IOException e) {
-                Toast.makeText(getContext(), "Failed.", Toast.LENGTH_LONG).show();
+        File path = requireContext().getExternalFilesDir(null);
+        File file = new File(path, fileData.getFileName() + "[3]." + fileData.getFileExt());
+        try {
+            FileOutputStream output = new FileOutputStream(file);
+            output.write(resultBytes);
+            output.close();
+            Toast.makeText(requireContext(), String.format(getString(R.string.success_save_file), file.getAbsolutePath()), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            Toast.makeText(requireContext(), R.string.failed_save_file + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                selectFile();
+            } else {
+                Toast.makeText(requireContext(), R.string.permission_denied_warning, Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
     @Override

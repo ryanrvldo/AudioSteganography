@@ -7,34 +7,21 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.skripsi.audiosteganography.model.FileData;
+
 public class DecompressViewModel extends ViewModel {
-
-    public static final String TAG = "COMPRESS";
-
+    private MutableLiveData<FileData> fileData = new MutableLiveData<>();
     private Repository repository;
-    private MutableLiveData<byte[]> initBytes = new MutableLiveData<>();
 
     public DecompressViewModel() {
         repository = new Repository();
     }
 
-    public void setInitBytes(ContentResolver resolver, Uri uri) {
-        initBytes.setValue(repository.readByteFile(resolver, uri));
+    public void setFileData(ContentResolver resolver, Uri uri, String filePath) {
+        fileData.setValue(repository.getFileData(resolver, uri, filePath));
     }
 
-    public LiveData<byte[]> getInitBytes() {
-        return initBytes;
-    }
-
-    public void setFileInfo(String file) {
-        repository.setFileInfo(file);
-    }
-
-    public String getFileExt() {
-        return repository.getFileExt();
-    }
-
-    public String getFileName() {
-        return repository.getFileName();
+    public LiveData<FileData> getFileData() {
+        return fileData;
     }
 }

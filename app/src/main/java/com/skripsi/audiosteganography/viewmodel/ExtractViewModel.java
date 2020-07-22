@@ -7,36 +7,30 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.skripsi.audiosteganography.model.FileData;
+import com.skripsi.audiosteganography.model.PseudoRandomNumber;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class ExtractViewModel extends ViewModel {
-    private MutableLiveData<byte[]> dataAudio = new MutableLiveData<>();
+    private MutableLiveData<FileData> fileData = new MutableLiveData<>();
     private MutableLiveData<Integer[]> xnValue = new MutableLiveData<>();
-    private byte[] bytesAudio;
+    private PseudoRandomNumber randomNumber;
 
-    private int[] key = new int[5];
     private Repository repository;
 
     public ExtractViewModel() {
         repository = new Repository();
     }
 
-    public void setBytesAudio(ContentResolver resolver, Uri uri) {
-        bytesAudio = repository.readByteFile(resolver, uri);
-        if (bytesAudio != null) {
-            setDataAudio();
-        }
+    public void setFileData(ContentResolver resolver, Uri uri, String filePath) {
+        fileData.postValue(repository.getFileData(resolver, uri, filePath));
     }
 
-    private void setDataAudio() {
-        dataAudio.setValue(Arrays.copyOfRange(bytesAudio, 40, bytesAudio.length));
-    }
-
-    public LiveData<byte[]> getDataAudio() {
-        return dataAudio;
+    public LiveData<FileData> getFileData() {
+        return fileData;
     }
 
     public void setKey(ContentResolver contentResolver, Uri uri) {
@@ -46,37 +40,26 @@ public class ExtractViewModel extends ViewModel {
             builder.append((char) msgByte);
         }
         StringTokenizer tokenizer = new StringTokenizer(builder.toString(), ",");
-        for (int i = 0; i < key.length; i++) {
+        int[] key = new int[5];
+        for (int i = 0; i < 5; i++) {
             key[i] = Integer.parseInt(tokenizer.nextToken());
         }
+        randomNumber = new PseudoRandomNumber(key[0], key[1], key[2], key[3], key[4]);
     }
 
-    public int[] getKey() {
-        return key;
+    public PseudoRandomNumber getKey() {
+        return randomNumber;
     }
 
-    public void setXnValue(int length, int a, int b, int c0, int x0) {
-        repository.setKey(a, b, c0, x0);
-        xnValue.setValue(repository.getXN(length));
+    public void setXnValue() {
+        xnValue.setValue(repository.getXN(randomNumber));
     }
 
     public LiveData<Integer[]> getXnValue() {
         return xnValue;
     }
 
-    public void setFileInfo(String file) {
-        repository.setFileInfo(file);
-    }
-
-    public String getFileExt() {
-        return repository.getFileExt();
-    }
-
-    public String getFileName() {
-        return repository.getFileName();
-    }
-
-    public String[] generateBinaryToMessage(String binaryMessage) {
+    public String[] generateBinaryToString(String binaryMessage) {
         List<String> parts = new ArrayList<>();
 
         int length = binaryMessage.length();

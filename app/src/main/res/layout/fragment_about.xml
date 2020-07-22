@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.AboutFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_dimen"
+        android:fontFamily="@font/asap_bold"
+        android:text="@string/title_home"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/default_dimen"
+        android:contentDescription="@string/description_fasilkom_logo"
+        android:src="@drawable/fasilkom" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/default_dimen"
+        android:fontFamily="@font/asap_medium"
+        android:text="@string/author"
+        android:textAlignment="center"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_dimen"
+        android:background="@drawable/bg_text_rounded"
+        android:fontFamily="@font/asap_medium"
+        android:padding="@dimen/default_dimen"
+        android:text="@string/about_description"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+</LinearLayout>

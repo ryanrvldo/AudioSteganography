@@ -1,11 +1,49 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlHighlight">@color/colorPrimaryDark</item>
+        <item name="android:fontFamily">@font/asap_regular</item>
+        <item name="android:textColor">@android:color/secondary_text_light</item>
     </style>
 
+    <style name="Widget.Custom.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="hintTextAppearance">@style/TextAppearance.Custom.TextInputLayout.HintText</item>
+        <item name="hintTextColor">@color/colorPrimary</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="boxStrokeColor">@color/colorPrimaryLight</item>
+    </style>
+
+    <style name="TextAppearance.Custom.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="Widget.Custom.Button" parent="Widget.MaterialComponents.Button">
+        <item name="textAllCaps">false</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:padding">8dp</item>
+        <item name="elevation">8dp</item>
+    </style>
+
+    <style name="Widget.Custom.Button.Menu" parent="Widget.MaterialComponents.Button">
+        <item name="textAllCaps">false</item>
+        <item name="backgroundTint">@color/colorPrimaryLight</item>
+        <item name="android:textSize">17sp</item>
+        <item name="elevation">20dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:titleMargin">0dp</item>
+        <item name="cornerRadius">10dp</item>
+
+    </style>
+
+    <style name="Widget.Custom.Title.TextView" parent="">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/asap_bold</item>
+    </style>
 </resources>

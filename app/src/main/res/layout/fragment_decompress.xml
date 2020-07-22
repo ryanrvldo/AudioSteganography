@@ -4,75 +4,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/default_dimen"
     tools:context=".ui.CompressFragment">
 
     <TextView
         android:id="@+id/tv_file"
+        style="@style/Widget.Custom.Title.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_dimen"
         android:layout_marginTop="@dimen/default_dimen"
-        android:text="File:"
+        android:text="@string/file"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_filePath"
+        android:id="@+id/tv_file_path"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/btn_selectFile"
+        app:layout_constraintEnd_toStartOf="@+id/btn_select_file"
         app:layout_constraintStart_toEndOf="@+id/tv_file"
         app:layout_constraintTop_toTopOf="@+id/tv_file"
         tools:text="File Path" />
 
     <Button
-        android:id="@+id/btn_selectFile"
-        style="@style/Widget.MaterialComponents.Button"
+        android:id="@+id/btn_select_file"
+        style="@style/Widget.Custom.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/default_dimen"
-        android:text="Select File"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
+        android:text="@string/select_file"
         app:layout_constraintBottom_toBottomOf="@+id/tv_file"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_file" />
 
     <Button
         android:id="@+id/btn_decompress"
-        style="@style/Widget.MaterialComponents.Button"
+        style="@style/Widget.Custom.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_dimen"
-        android:text="Decompress"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/btn_selectFile"
-        app:layout_constraintStart_toStartOf="@+id/tv_file"
-        app:layout_constraintTop_toBottomOf="@+id/btn_selectFile" />
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/decompress_file"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_select_file" />
 
     <TextView
         android:id="@+id/tv_process"
+        style="@style/Widget.Custom.Title.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Process Status:"
-        app:layout_constraintStart_toStartOf="@+id/btn_decompress"
+        android:layout_marginVertical="@dimen/default_dimen"
+        android:layout_marginStart="@dimen/default_dimen"
+        android:text="@string/process_status"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_decompress" />
 
     <TextView
         android:id="@+id/tv_status"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="@dimen/default_dimen"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_process"
+        android:layout_marginHorizontal="@dimen/default_dimen"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_process"
-        app:layout_constraintTop_toTopOf="@+id/tv_process"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_process"
         tools:text="Status" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
