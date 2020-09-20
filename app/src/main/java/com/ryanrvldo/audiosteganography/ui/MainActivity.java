@@ -1,4 +1,4 @@
-package com.skripsi.audiosteganography;
+package com.ryanrvldo.audiosteganography.ui;
 
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +8,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.skripsi.audiosteganography.databinding.ActivityMainBinding;
+import com.ryanrvldo.audiosteganography.R;
+import com.ryanrvldo.audiosteganography.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 

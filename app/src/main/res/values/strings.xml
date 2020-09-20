@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AudioSteganography</string>
+    <string name="app_name">Audio Steganography</string>
 
     <string name="title_home">Pengamanan Pesan Teks Menggunakan Metode MLSB dan Algoritma RLE pada File Audio</string>
     <string name="audio_file_selected">Audio file has been selected.</string>
@@ -20,9 +20,9 @@
     <string name="input_seed_warning">Please input seed value of Multiply With Carry Generator.</string>
     <string name="input_message_audio_warning">Please input message and audio file first.</string>
     <string name="permission_denied_warning">Permission denied. Please allow permission to continue.</string>
-    <string name="success_save_file">Process is successful.\nFile saved in: %s</string>
-    <string name="failed_save_file">Sorry failed to save result file. Error: </string>
-    <string name="process_failed_warning">Sorry, process is getting error. Please try again. Error: </string>
+    <string name="success_save_file">Process is successful.</string>
+    <string name="failed_save_file">Sorry failed to save result file.\n</string>
+    <string name="process_failed_warning">Sorry, process is getting error. Please try again.</string>
     <string name="read_key_success">Success read key file.</string>
     <string name="input_key_warning">Please input key file first.</string>
     <string name="file">File:</string>
@@ -43,4 +43,6 @@
     <string name="key">Key:</string>
     <string name="select_key">Select Key</string>
     <string name="extract_message">Extract Message</string>
+    <string name="uri_null">You didn\'t select anything.</string>
+    <string name="failed_read_key">Failed to read key.</string>
 </resources>

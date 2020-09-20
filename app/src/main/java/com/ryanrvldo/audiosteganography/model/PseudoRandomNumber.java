@@ -1,4 +1,4 @@
-package com.skripsi.audiosteganography.model;
+package com.ryanrvldo.audiosteganography.model;
 
 import java.math.BigInteger;
 

@@ -1,4 +1,4 @@
-package com.skripsi.audiosteganography.model;
+package com.ryanrvldo.audiosteganography.model;
 
 public class FileData {
     private String filePath;

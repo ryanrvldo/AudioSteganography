@@ -5,11 +5,11 @@
     app:startDestination="@id/homeFragment">
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.skripsi.audiosteganography.ui.HomeFragment"
+        android:name="com.ryanrvldo.audiosteganography.ui.HomeFragment"
         android:label="Audio Steganography"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_embedFragment"
+            android:id="@+id/action_home_to_embed"
             app:destination="@id/embedFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
@@ -17,7 +17,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@id/homeFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_compressFragment"
+            android:id="@+id/action_home_to_compress"
             app:destination="@id/compressFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
@@ -25,54 +25,54 @@
             app:popExitAnim="@anim/nav_default_exit_anim"
             app:popUpTo="@id/homeFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_decompressFragment"
+            android:id="@+id/action_home_to_decompress"
             app:destination="@id/decompressFragment"
             app:popUpTo="@id/homeFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_extractFragment"
+            android:id="@+id/action_home_to_extract"
             app:destination="@id/extractFragment"
             app:popUpTo="@id/homeFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_aboutFragment"
+            android:id="@+id/action_home_to_about"
             app:destination="@id/aboutFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/embedFragment"
-        android:name="com.skripsi.audiosteganography.ui.EmbedFragment"
+        android:name="com.ryanrvldo.audiosteganography.ui.EmbedFragment"
         android:label="Embed Message"
         tools:layout="@layout/fragment_embed">
         <action
-            android:id="@+id/action_embedFragment_to_compressFragment"
+            android:id="@+id/action_embed_to_compress"
             app:destination="@id/compressFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/compressFragment"
-        android:name="com.skripsi.audiosteganography.ui.CompressFragment"
+        android:name="com.ryanrvldo.audiosteganography.ui.CompressFragment"
         android:label="Compress File"
         tools:layout="@layout/fragment_compress" >
         <action
-            android:id="@+id/action_compressFragment_to_decompressFragment"
+            android:id="@+id/action_compress_to_decompress"
             app:destination="@id/decompressFragment" />
     </fragment>
     <fragment
         android:id="@+id/decompressFragment"
-        android:name="com.skripsi.audiosteganography.ui.DecompressFragment"
+        android:name="com.ryanrvldo.audiosteganography.ui.DecompressFragment"
         android:label="Decompress File"
         tools:layout="@layout/fragment_decompress">
         <action
-            android:id="@+id/action_decompressFragment_to_extractFragment"
+            android:id="@+id/action_decompress_to_extract"
             app:destination="@id/extractFragment" />
     </fragment>
     <fragment
         android:id="@+id/extractFragment"
-        android:name="com.skripsi.audiosteganography.ui.ExtractFragment"
+        android:name="com.ryanrvldo.audiosteganography.ui.ExtractFragment"
         android:label="Extract Message"
         tools:layout="@layout/fragment_extract" />
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.skripsi.audiosteganography.ui.AboutFragment"
+        android:name="com.ryanrvldo.audiosteganography.ui.AboutFragment"
         android:label="About"
         tools:layout="@layout/fragment_about" />
 </navigation>
