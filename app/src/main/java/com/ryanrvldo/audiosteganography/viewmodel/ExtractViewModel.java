@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.ryanrvldo.audiosteganography.model.FileData;
-import com.ryanrvldo.audiosteganography.model.PseudoRandomNumber;
+import com.ryanrvldo.audiosteganography.model.Seed;
 import com.ryanrvldo.audiosteganography.utils.FileHelper;
 import com.ryanrvldo.audiosteganography.utils.MWCGenerator;
 
@@ -15,19 +15,20 @@ import java.io.InputStream;
 import java.util.StringTokenizer;
 
 public class ExtractViewModel extends ViewModel {
-    private MutableLiveData<FileData> fileData = new MutableLiveData<>();
-    private MutableLiveData<Integer[]> xnValue = new MutableLiveData<>();
-    private PseudoRandomNumber randomNumber;
+    private final MutableLiveData<FileData> fileData = new MutableLiveData<>();
+    private final MutableLiveData<Integer[]> xnValue = new MutableLiveData<>();
+    private Seed randomNumber;
 
     public void setFileData(InputStream inputStream, String filePath) {
-        fileData.postValue(FileHelper.getFileData(inputStream, filePath));
+        FileData data = FileHelper.getFileData(inputStream, filePath);
+        if (data != null) fileData.postValue(data);
     }
 
     public LiveData<FileData> getFileData() {
         return fileData;
     }
 
-    public PseudoRandomNumber getKey() {
+    public Seed getKey() {
         return randomNumber;
     }
 
@@ -44,11 +45,12 @@ public class ExtractViewModel extends ViewModel {
 
         try {
             StringTokenizer tokenizer = new StringTokenizer(builder.toString(), ",");
-            int[] key = new int[5];
-            for (int i = 0; i < 5; i++) {
+            int tokenLength = tokenizer.countTokens();
+            int[] key = new int[tokenLength];
+            for (int i = 0; i < tokenLength; i++) {
                 key[i] = Integer.parseInt(tokenizer.nextToken());
             }
-            randomNumber = new PseudoRandomNumber(key[0], key[1], key[2], key[3], key[4]);
+            randomNumber = new Seed(key[0], key[1], key[2], key[3], key[4]);
         } catch (NumberFormatException e) {
             Log.e("ReadKey", "error: ", e);
             randomNumber = null;

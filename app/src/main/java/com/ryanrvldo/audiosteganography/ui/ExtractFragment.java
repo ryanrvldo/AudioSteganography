@@ -1,7 +1,7 @@
 package com.ryanrvldo.audiosteganography.ui;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,22 +15,21 @@ import androidx.lifecycle.ViewModelProvider;
 import com.ryanrvldo.audiosteganography.R;
 import com.ryanrvldo.audiosteganography.databinding.FragmentExtractBinding;
 import com.ryanrvldo.audiosteganography.model.FileData;
-import com.ryanrvldo.audiosteganography.model.PseudoRandomNumber;
-import com.ryanrvldo.audiosteganography.utils.FileHelper;
+import com.ryanrvldo.audiosteganography.model.Seed;
 import com.ryanrvldo.audiosteganography.viewmodel.ExtractViewModel;
 
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class ExtractFragment extends BaseFragment {
 
     private FragmentExtractBinding binding;
     private ExtractViewModel viewModel;
-    private FileHelper fileHelperAudio;
 
     private FileData fileData;
     private byte[] bytesAudio;
     private Integer[] xn;
-    private PseudoRandomNumber key;
+    private Seed key;
 
     public ExtractFragment() {
     }
@@ -41,7 +40,6 @@ public class ExtractFragment extends BaseFragment {
 
         viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory())
                 .get(ExtractViewModel.class);
-        fileHelperAudio = new FileHelper(requireActivity());
     }
 
     @Override
@@ -70,6 +68,7 @@ public class ExtractFragment extends BaseFragment {
         });
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -95,10 +94,12 @@ public class ExtractFragment extends BaseFragment {
 
     @Override
     public void selectAudioFileCallback(Uri result) throws FileNotFoundException {
-        fileHelperAudio.setPick(result, Build.VERSION.SDK_INT);
-        viewModel.setFileData(requireContext().getContentResolver().openInputStream(result), fileHelperAudio.getFilePath());
-        showSnackbar(R.string.read_audio_success);
-        binding.tvStatus.setText(getString(R.string.audio_file_selected));
+        InputStream inputStream = requireContext().getContentResolver().openInputStream(result);
+        viewModel.setFileData(inputStream, result.getPath());
+        if (fileData != null) {
+            showSnackbar(R.string.read_audio_success);
+            binding.tvStatus.setText(getString(R.string.audio_file_selected));
+        }
     }
 
     @Override
@@ -148,6 +149,11 @@ public class ExtractFragment extends BaseFragment {
     public void onPrepareOptionsMenu(@NonNull Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.next_menu).setVisible(false);
+    }
+
+    @Override
+    protected int nextNavigationId() {
+        return 0;
     }
 
     @Override

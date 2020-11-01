@@ -2,6 +2,7 @@ package com.ryanrvldo.audiosteganography.ui;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,73 +23,37 @@ import com.ryanrvldo.audiosteganography.R;
 
 import java.io.FileNotFoundException;
 
-public class BaseFragment extends Fragment implements View.OnClickListener {
+public abstract class BaseFragment extends Fragment implements View.OnClickListener {
 
-    public ActivityResultLauncher<String> mCreateAudioFile = registerForActivityResult(new CreateDocument(),
-            result -> {
-                if (result == null) {
-                    showSnackbar(R.string.uri_null);
-                    return;
-                }
-                saveAudioFileCallback(result);
-            });
-
-    public ActivityResultLauncher<String> mCreateKeyFile = registerForActivityResult(new CreateDocument(),
-            result -> {
-                if (result == null) {
-                    showSnackbar(R.string.uri_null);
-                    return;
-                }
-                saveKeyFileCallback(result);
-            });
-    private NavController navController;
+    private static final String TAG = "BaseFragment";
+    protected NavController navController;
+    protected ActivityResultLauncher<String> mCreateAudioFile = registerForActivityResult(new CreateDocument(),
+            result -> checkOnUriResultIsNull(result, uri -> this.saveAudioFileCallback(result)));
+    protected ActivityResultLauncher<String> mCreateKeyFile = registerForActivityResult(new CreateDocument(),
+            result -> checkOnUriResultIsNull(result, uri -> saveKeyFileCallback(result)));
     private boolean isAudio = true;
-    private ActivityResultLauncher<String> mGetContent = registerForActivityResult(new GetContent(),
-            result -> {
-                if (result == null) {
-                    showSnackbar(R.string.uri_null);
-                    return;
-                }
+    private final ActivityResultLauncher<String> mGetContent = registerForActivityResult(new GetContent(),
+            result -> checkOnUriResultIsNull(result, uri -> {
                 try {
                     if (isAudio) {
                         selectAudioFileCallback(result);
+                        Log.d(TAG, "Uri: " + result.getPath());
                     } else {
                         selectTextFileCallback(result);
                     }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                } catch (FileNotFoundException exception) {
+                    Log.d(TAG, result + " : FileNotFound", exception);
                 }
-            });
+            }));
 
-    public BaseFragment() {
-    }
-
-    public void selectContent(@NonNull String input) {
-        isAudio = input.contains("audio");
-        mGetContent.launch(input);
-    }
-
-    public void selectAudioFileCallback(Uri result) throws FileNotFoundException {
-    }
-
-    public void selectTextFileCallback(Uri result) throws FileNotFoundException {
-    }
-
-    public void saveKeyFileCallback(Uri result) {
-    }
-
-    public void saveAudioFileCallback(Uri result) {
-    }
+    @Override
+    public abstract void onClick(View view);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onClick(View view) {
     }
 
     @Override
@@ -99,25 +64,51 @@ public class BaseFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.next_menu:
-                navController.navigate(nextNavigationId());
-                return true;
-            case R.id.home_menu:
-                navController.popBackStack(R.id.homeFragment, false);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int menuItemId = item.getItemId();
+        if (menuItemId == R.id.next_menu) {
+            navController.navigate(nextNavigationId());
+            return true;
+        } else if (menuItemId == R.id.home_menu) {
+            navController.popBackStack(R.id.homeFragment, false);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
-    public int nextNavigationId() {
-        return 0;
+    protected abstract int nextNavigationId();
+
+    protected void selectContent(@NonNull String input) {
+        isAudio = input.contains("audio");
+        mGetContent.launch(input);
     }
 
-    public void showSnackbar(int resId) {
+    protected abstract void selectAudioFileCallback(Uri result) throws FileNotFoundException;
+
+    protected void saveAudioFileCallback(Uri result) {
+    }
+
+    protected void selectTextFileCallback(Uri result) throws FileNotFoundException {
+    }
+
+    protected void saveKeyFileCallback(Uri result) {
+    }
+
+    private void checkOnUriResultIsNull(Uri result, OnUriResultIsNotNull onUriResultIsNotNull) {
+        if (result == null) {
+            showSnackbar(R.string.uri_null);
+        } else {
+            onUriResultIsNotNull.callback(result);
+        }
+    }
+
+    protected void showSnackbar(int resId) {
         Snackbar.make(requireView(), resId, Snackbar.LENGTH_SHORT)
                 .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.colorPrimaryLight))
                 .show();
+    }
+
+    private interface OnUriResultIsNotNull {
+        void callback(Uri uri);
     }
 }

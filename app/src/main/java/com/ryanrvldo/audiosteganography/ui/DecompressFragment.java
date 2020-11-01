@@ -1,7 +1,7 @@
 package com.ryanrvldo.audiosteganography.ui;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,19 +14,17 @@ import androidx.lifecycle.ViewModelProvider;
 import com.ryanrvldo.audiosteganography.R;
 import com.ryanrvldo.audiosteganography.databinding.FragmentDecompressBinding;
 import com.ryanrvldo.audiosteganography.model.FileData;
-import com.ryanrvldo.audiosteganography.utils.FileHelper;
 import com.ryanrvldo.audiosteganography.viewmodel.DecompressViewModel;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 public class DecompressFragment extends BaseFragment {
 
     private FragmentDecompressBinding binding;
     private DecompressViewModel viewModel;
-
-    private FileHelper fileHelperAudio;
 
     private FileData fileData;
     private byte[] initBytes;
@@ -49,7 +47,6 @@ public class DecompressFragment extends BaseFragment {
 
         viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory())
                 .get(DecompressViewModel.class);
-        fileHelperAudio = new FileHelper(requireActivity());
 
         viewModel.getFileData().observe(getViewLifecycleOwner(), data -> {
             if (data != null) {
@@ -60,6 +57,7 @@ public class DecompressFragment extends BaseFragment {
         });
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -79,10 +77,12 @@ public class DecompressFragment extends BaseFragment {
 
     @Override
     public void selectAudioFileCallback(Uri result) throws FileNotFoundException {
-        fileHelperAudio.setPick(result, Build.VERSION.SDK_INT);
-        viewModel.setFileData(requireContext().getContentResolver().openInputStream(result), fileHelperAudio.getFilePath());
-        showSnackbar(R.string.read_audio_success);
-        binding.tvStatus.setText(getResources().getString(R.string.audio_file_selected));
+        InputStream inputStream = requireContext().getContentResolver().openInputStream(result);
+        viewModel.setFileData(inputStream, result.getPath());
+        if (fileData != null) {
+            showSnackbar(R.string.read_audio_success);
+            binding.tvStatus.setText(getResources().getString(R.string.audio_file_selected));
+        }
     }
 
     @Override

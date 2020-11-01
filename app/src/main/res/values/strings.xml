@@ -19,7 +19,6 @@
     <string name="input_audio_warning">Please input audio file first.</string>
     <string name="input_seed_warning">Please input seed value of Multiply With Carry Generator.</string>
     <string name="input_message_audio_warning">Please input message and audio file first.</string>
-    <string name="permission_denied_warning">Permission denied. Please allow permission to continue.</string>
     <string name="success_save_file">Process is successful.</string>
     <string name="failed_save_file">Sorry failed to save result file.\n</string>
     <string name="process_failed_warning">Sorry, process is getting error. Please try again.</string>
@@ -45,4 +44,5 @@
     <string name="extract_message">Extract Message</string>
     <string name="uri_null">You didn\'t select anything.</string>
     <string name="failed_read_key">Failed to read key.</string>
+    <string name="failed_read_file">Sorry, failed to read file. </string>
 </resources>

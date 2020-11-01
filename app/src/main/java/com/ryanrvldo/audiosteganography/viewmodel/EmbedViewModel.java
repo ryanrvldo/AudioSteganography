@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.ryanrvldo.audiosteganography.model.FileData;
-import com.ryanrvldo.audiosteganography.model.PseudoRandomNumber;
+import com.ryanrvldo.audiosteganography.model.Seed;
 import com.ryanrvldo.audiosteganography.utils.FileHelper;
 import com.ryanrvldo.audiosteganography.utils.MWCGenerator;
 
@@ -20,12 +20,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EmbedViewModel extends ViewModel {
-    private MutableLiveData<FileData> fileData = new MutableLiveData<>();
-    private MutableLiveData<Integer[]> xnValue = new MutableLiveData<>();
+    private final MutableLiveData<FileData> fileData = new MutableLiveData<>();
+    private final MutableLiveData<Integer[]> xnValue = new MutableLiveData<>();
     private String message;
 
     public void setFileData(InputStream inputStream, String filePath) {
-        fileData.setValue(FileHelper.getFileData(inputStream, filePath));
+        FileData data = FileHelper.getFileData(inputStream, filePath);
+        if (data != null) fileData.postValue(data);
     }
 
     public LiveData<FileData> getFileData() {
@@ -39,7 +40,7 @@ public class EmbedViewModel extends ViewModel {
     public void setMessage(InputStream inputStream) {
         byte[] byteMessages = FileHelper.readByteFile(inputStream);
         if (byteMessages == null) {
-            message = "Error.";
+            message = null;
             return;
         }
         StringBuilder builder = new StringBuilder();
@@ -63,7 +64,7 @@ public class EmbedViewModel extends ViewModel {
         return xnValue;
     }
 
-    public void setXnValue(PseudoRandomNumber randomNumber) {
+    public void setXnValue(Seed randomNumber) {
         xnValue.setValue(MWCGenerator.getXN(randomNumber));
     }
 
@@ -100,7 +101,7 @@ public class EmbedViewModel extends ViewModel {
         return resultMap;
     }
 
-    public boolean saveKey(OutputStream outputStream, PseudoRandomNumber seed) {
+    public boolean saveKey(OutputStream outputStream, Seed seed) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream))) {
             bufferedWriter.write(seed.getA() + ",");
             bufferedWriter.write(seed.getB() + ",");

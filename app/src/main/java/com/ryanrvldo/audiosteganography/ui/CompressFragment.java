@@ -1,7 +1,7 @@
 package com.ryanrvldo.audiosteganography.ui;
 
+import android.annotation.SuppressLint;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +14,11 @@ import androidx.lifecycle.ViewModelProvider;
 import com.ryanrvldo.audiosteganography.R;
 import com.ryanrvldo.audiosteganography.databinding.FragmentCompressBinding;
 import com.ryanrvldo.audiosteganography.model.FileData;
-import com.ryanrvldo.audiosteganography.utils.FileHelper;
 import com.ryanrvldo.audiosteganography.viewmodel.CompressViewModel;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 public class CompressFragment extends BaseFragment {
@@ -26,9 +26,7 @@ public class CompressFragment extends BaseFragment {
     private FragmentCompressBinding binding;
     private CompressViewModel viewModel;
 
-    private FileHelper fileHelperAudio;
     private FileData fileData;
-
     private byte[] initBytes;
     private byte[] resultBytes;
     private double runningTime;
@@ -49,7 +47,6 @@ public class CompressFragment extends BaseFragment {
         binding.btnCompress.setOnClickListener(this);
 
         viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(CompressViewModel.class);
-        fileHelperAudio = new FileHelper(requireActivity());
 
         viewModel.getFileData().observe(getViewLifecycleOwner(), data -> {
             if (data != null) {
@@ -60,6 +57,7 @@ public class CompressFragment extends BaseFragment {
         });
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -67,22 +65,24 @@ public class CompressFragment extends BaseFragment {
                 selectContent("audio/*");
                 break;
             case R.id.btn_compress:
-                if (initBytes != null) {
-                    compressFile();
-                    mCreateAudioFile.launch(fileData.getFileName() + "[2]." + fileData.getFileExt());
-                } else {
+                if (initBytes == null || fileData == null) {
                     showSnackbar(R.string.input_audio_warning);
+                    break;
                 }
+                compressFile();
+                mCreateAudioFile.launch(fileData.getFileName() + "[2]." + fileData.getFileExt());
                 break;
         }
     }
 
     @Override
     public void selectAudioFileCallback(Uri result) throws FileNotFoundException {
-        fileHelperAudio.setPick(result, Build.VERSION.SDK_INT);
-        viewModel.setFileData(requireContext().getContentResolver().openInputStream(result), fileHelperAudio.getFilePath());
-        showSnackbar(R.string.read_audio_success);
-        binding.tvStatus.setText(R.string.audio_file_selected);
+        InputStream inputStream = requireContext().getContentResolver().openInputStream(result);
+        viewModel.setFileData(inputStream, result.getPath());
+        if (fileData != null) {
+            showSnackbar(R.string.read_audio_success);
+            binding.tvStatus.setText(R.string.audio_file_selected);
+        }
     }
 
     @Override

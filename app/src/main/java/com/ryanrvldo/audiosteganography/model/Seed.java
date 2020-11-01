@@ -2,14 +2,14 @@ package com.ryanrvldo.audiosteganography.model;
 
 import java.math.BigInteger;
 
-public class PseudoRandomNumber {
-    private BigInteger a;
-    private BigInteger b;
-    private BigInteger c0;
-    private BigInteger x0;
-    private int length;
+public class Seed {
+    private final BigInteger a;
+    private final BigInteger b;
+    private final BigInteger c0;
+    private final BigInteger x0;
+    private final int length;
 
-    public PseudoRandomNumber(int a, int b, int c0, int x0, int length) {
+    public Seed(int a, int b, int c0, int x0, int length) {
         this.a = BigInteger.valueOf(a);
         this.b = BigInteger.valueOf(b);
         this.c0 = BigInteger.valueOf(c0);

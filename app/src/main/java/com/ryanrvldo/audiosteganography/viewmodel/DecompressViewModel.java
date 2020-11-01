@@ -12,10 +12,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class DecompressViewModel extends ViewModel {
-    private MutableLiveData<FileData> fileData = new MutableLiveData<>();
+    private final MutableLiveData<FileData> fileData = new MutableLiveData<>();
 
     public void setFileData(InputStream inputStream, String filePath) {
-        fileData.setValue(FileHelper.getFileData(inputStream, filePath));
+        FileData data = FileHelper.getFileData(inputStream, filePath);
+        if (data != null) fileData.postValue(data);
     }
 
     public LiveData<FileData> getFileData() {

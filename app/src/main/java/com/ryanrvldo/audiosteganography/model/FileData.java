@@ -1,7 +1,7 @@
 package com.ryanrvldo.audiosteganography.model;
 
 public class FileData {
-    private String filePath;
+    private final String filePath;
     private String fileExt;
     private String fileName;
     private byte[] fileBytes;

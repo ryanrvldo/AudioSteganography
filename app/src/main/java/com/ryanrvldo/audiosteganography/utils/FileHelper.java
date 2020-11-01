@@ -1,37 +1,30 @@
 package com.ryanrvldo.audiosteganography.utils;
 
-import android.net.Uri;
+import android.util.Log;
 
-import androidx.fragment.app.FragmentActivity;
-
-import com.hbisoft.pickit.PickiT;
-import com.hbisoft.pickit.PickiTCallbacks;
 import com.ryanrvldo.audiosteganography.model.FileData;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class FileHelper implements PickiTCallbacks {
-    private static FileData fileData;
-    private PickiT pick;
-    private String filePath;
+public class FileHelper {
 
-    public FileHelper(FragmentActivity activity) {
-        pick = new PickiT(activity, this, activity);
-    }
+    private static final String TAG = "FileHelper";
 
     public static FileData getFileData(InputStream inputStream, String filePath) {
-        fileData = new FileData(filePath);
-        fileData.setFileBytes(readByteFile(inputStream));
-        setFileInfo();
-        System.out.println(fileData.getFileName());
+        FileData fileData = new FileData(filePath);
+
+        byte[] fileBytes = readByteFile(inputStream);
+        if (fileBytes == null) return null;
+
+        fileData.setFileBytes(fileBytes);
+        setFileInfo(fileData);
         return fileData;
     }
 
     public static byte[] readByteFile(InputStream inputStream) {
-        try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
             byte[] bytes = new byte[1000000];
             int bytesRead;
             if (inputStream != null) {
@@ -39,20 +32,23 @@ public class FileHelper implements PickiTCallbacks {
                     bos.write(bytes, 0, bytesRead);
                 }
             }
+            inputStream.close();
             return bos.toByteArray();
         } catch (IOException e) {
+            Log.d(TAG, "readByteFile: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
 
-    static void setFileInfo() {
+    static void setFileInfo(FileData fileData) {
         String ext = "";
         String name = "";
         boolean check = false;
         char tmp;
         if (fileData.getFilePath() != null) {
-            for (int i = fileData.getFilePath().length(); i > 0; i--) {
-                tmp = fileData.getFilePath().charAt(i - 1);
+            for (int i = fileData.getFilePath().length() - 1; i > 0; i--) {
+                tmp = fileData.getFilePath().charAt(i);
                 if (tmp == '/') i = 0;
                 else {
                     if (tmp == '.') check = true;
@@ -67,35 +63,4 @@ public class FileHelper implements PickiTCallbacks {
         fileData.setFileName(name);
     }
 
-    public void setPick(Uri uri, int apiLevel) {
-        pick.getPath(uri, apiLevel);
-    }
-
-    public String getFilePath() {
-        return filePath;
-    }
-
-    private void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-    @Override
-    public void PickiTonUriReturned() {
-
-    }
-
-    @Override
-    public void PickiTonStartListener() {
-
-    }
-
-    @Override
-    public void PickiTonProgressUpdate(int progress) {
-
-    }
-
-    @Override
-    public void PickiTonCompleteListener(String path, boolean wasDriveFile, boolean wasUnknownProvider, boolean wasSuccessful, String Reason) {
-        setFilePath(path);
-    }
 }

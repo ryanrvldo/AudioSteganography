@@ -12,10 +12,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class CompressViewModel extends ViewModel {
-    private MutableLiveData<FileData> fileData = new MutableLiveData<>();
+    private final MutableLiveData<FileData> fileData = new MutableLiveData<>();
 
     public void setFileData(InputStream inputStream, String filePath) {
-        fileData.setValue(FileHelper.getFileData(inputStream, filePath));
+        FileData data = FileHelper.getFileData(inputStream, filePath);
+        if (data != null) fileData.postValue(data);
     }
 
     public LiveData<FileData> getFileData() {
@@ -28,6 +29,7 @@ public class CompressViewModel extends ViewModel {
             byte sign = '#';
             byte current = initBytes[0];
             int count = 1;
+
             for (int i = 1; i < initBytes.length; i++) {
                 if (current == initBytes[i]) {
                     count++;
